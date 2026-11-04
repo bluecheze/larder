@@ -31,7 +31,11 @@ impl Machine {
     }
 
     async fn sync(&mut self) -> Vec<ChangeKind> {
-        let job = SyncJob { client: &self.client, shelf: "docs", root: self.dir.path(), device: self.name };
+        self.sync_ignoring(&[]).await
+    }
+
+    async fn sync_ignoring(&mut self, ignore: &[String]) -> Vec<ChangeKind> {
+        let job = SyncJob { client: &self.client, shelf: "docs", root: self.dir.path(), device: self.name, ignore };
         sync_shelf(&job, &mut self.state).await.unwrap().into_iter().map(|c| c.kind).collect()
     }
 }
@@ -146,4 +150,18 @@ async fn deleting_the_last_file_cleans_up_folders() {
     w.a.sync().await;
     w.b.sync().await;
     assert!(!w.b.path("deep").exists());
+}
+
+#[tokio::test]
+async fn ignoring_synced_files_never_deletes_them() {
+    let mut w = world().await;
+    w.a.write("art.psd", "layers");
+    w.a.write("cache/blob.bin", "junk");
+    w.a.sync().await;
+    let ignore = vec!["*.psd".to_string(), "cache".to_string()];
+    assert!(w.a.sync_ignoring(&ignore).await.is_empty());
+    fs::remove_file(w.a.path("art.psd")).unwrap();
+    assert!(w.a.sync_ignoring(&ignore).await.is_empty());
+    assert!(w.library.join("docs/art.psd").exists());
+    assert!(w.library.join("docs/cache/blob.bin").exists());
 }

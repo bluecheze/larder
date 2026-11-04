@@ -29,9 +29,15 @@ pub type Manifest = BTreeMap<RelPath, FileEntry>;
 /// reuse the old hash, otherwise a big photo library would be rehashed every
 /// few seconds.
 pub fn scan(root: &Path, previous: &Manifest) -> io::Result<Manifest> {
+    scan_with(root, previous, &[])
+}
+
+/// Same as `scan`, plus the user's own ignore patterns from settings.
+pub fn scan_with(root: &Path, previous: &Manifest, extra: &[String]) -> io::Result<Manifest> {
     let mut found = Manifest::new();
     let walker = WalkDir::new(root).follow_links(false).into_iter();
-    for item in walker.filter_entry(|e| !is_ignored(e.file_name().to_str().unwrap_or(""))) {
+    let skip = |name: &str| is_ignored(name) || extra.iter().any(|pattern| matches_pattern(pattern, name));
+    for item in walker.filter_entry(|e| !skip(e.file_name().to_str().unwrap_or(""))) {
         let item = match item {
             Ok(item) => item,
             // A file can vanish between listing the folder and reading it.
@@ -86,6 +92,34 @@ pub fn is_ignored(name: &str) -> bool {
         || name.starts_with("._")
 }
 
+/// Tiny glob: `*` matches any run of characters, everything else is
+/// literal. Covers what people actually type ("*.tmp", "node_modules",
+/// "~$*") without pulling in a glob crate. Case-insensitive, since two of
+/// the three OSes don't care about case in filenames either.
+pub fn matches_pattern(pattern: &str, name: &str) -> bool {
+    let pattern = pattern.trim().to_lowercase();
+    let name = name.to_lowercase();
+    if pattern.is_empty() {
+        return false;
+    }
+    let parts: Vec<&str> = pattern.split('*').collect();
+    let (first, last) = (parts[0], parts[parts.len() - 1]);
+    if parts.len() == 1 {
+        return name == pattern;
+    }
+    if !name.starts_with(first) || !name.ends_with(last) || name.len() < first.len() + last.len() {
+        return false;
+    }
+    let mut rest = &name[first.len()..name.len() - last.len()];
+    for middle in &parts[1..parts.len() - 1] {
+        match rest.find(middle) {
+            Some(at) => rest = &rest[at + middle.len()..],
+            None => return false,
+        }
+    }
+    true
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -104,6 +138,30 @@ mod tests {
         let names: Vec<_> = manifest.keys().map(|k| k.as_str()).collect();
         assert_eq!(names, ["a/b/note.txt", "top.md"]);
         assert_eq!(manifest[&RelPath::parse("top.md").unwrap()].size, 1);
+    }
+
+    #[test]
+    fn patterns() {
+        assert!(matches_pattern("*.tmp", "draft.TMP"));
+        assert!(matches_pattern("node_modules", "node_modules"));
+        assert!(matches_pattern("~$*", "~$report.docx"));
+        assert!(matches_pattern("a*b*c", "axxbyyc"));
+        assert!(!matches_pattern("a*b*c", "axxcyyb"));
+        assert!(!matches_pattern("*.tmp", "tmp"));
+        assert!(!matches_pattern("", "anything"));
+    }
+
+    #[test]
+    fn user_patterns_skip_files_and_folders() {
+        let dir = tempfile::tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("node_modules/pkg")).unwrap();
+        fs::write(dir.path().join("node_modules/pkg/index.js"), "x").unwrap();
+        fs::write(dir.path().join("keep.txt"), "x").unwrap();
+        fs::write(dir.path().join("scratch.tmp"), "x").unwrap();
+        let extra = vec!["node_modules".to_string(), "*.tmp".to_string()];
+        let manifest = scan_with(dir.path(), &Manifest::new(), &extra).unwrap();
+        let names: Vec<_> = manifest.keys().map(|k| k.as_str()).collect();
+        assert_eq!(names, ["keep.txt"]);
     }
 
     #[test]
