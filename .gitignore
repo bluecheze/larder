@@ -5,3 +5,4 @@ dist/
 *.log
 app/src-tauri/gen/
 __pycache__/
+.dev/

@@ -1,0 +1,28 @@
+/* Warm neutrals taken from the banner's plaster and wood, so the app
+   still feels like the pantry without the whole UI being pixel art. */
+:root {
+  --bg: #f4efe5;
+  --surface: #fffdf8;
+  --surface-sunk: #f8f3ea;
+  --line: #e4dac8;
+  --line-strong: #cfc1a8;
+  --text: #2a2118;
+  --muted: #7a6b59;
+  --accent: #2f5fb3;
+  --accent-hover: #284f97;
+  --accent-soft: #e6edf9;
+  --warm: #d9702a;
+  --warm-soft: #fbeadb;
+  --danger: #b3412f;
+  --ok: #3f7d4a;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 2px rgb(60 40 20 / 0.06), 0 4px 14px rgb(60 40 20 / 0.06);
+
+  --font: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mark: "Silkscreen", monospace;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --quick: 140ms;
+}

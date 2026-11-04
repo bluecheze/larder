@@ -1,0 +1,20 @@
+.shell {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 28px;
+}
+
+.shell__card {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  padding: 32px;
+  min-width: 360px;
+}
+
+.shell__role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
