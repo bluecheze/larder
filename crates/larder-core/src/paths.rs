@@ -60,7 +60,7 @@ impl RelPath {
 /// Shelf names end up as folder names on the host, so they follow the same
 /// rules as a single path segment.
 pub fn valid_shelf_name(name: &str) -> bool {
-    valid_component(name) && !name.starts_with('.')
+    !name.contains('/') && !name.contains('\\') && valid_component(name) && !name.starts_with('.')
 }
 
 fn valid_component(part: &str) -> bool {
