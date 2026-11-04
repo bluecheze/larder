@@ -2,14 +2,16 @@ import archive from "pixelarticons/svg/archive.svg?raw";
 import arrowLeft from "pixelarticons/svg/arrow-left.svg?raw";
 import arrowRight from "pixelarticons/svg/arrow-right.svg?raw";
 import check from "pixelarticons/svg/check.svg?raw";
+import copy from "pixelarticons/svg/copy.svg?raw";
 import folder from "pixelarticons/svg/folder.svg?raw";
 import globe from "pixelarticons/svg/globe.svg?raw";
 import laptop from "pixelarticons/svg/laptop.svg?raw";
 import link from "pixelarticons/svg/link.svg?raw";
 import server from "pixelarticons/svg/server.svg?raw";
+import sliders from "pixelarticons/svg/sliders.svg?raw";
 import wifi from "pixelarticons/svg/wifi.svg?raw";
 
-const icons = { archive, arrowLeft, arrowRight, check, folder, globe, laptop, link, server, wifi };
+const icons = { archive, arrowLeft, arrowRight, check, copy, folder, globe, laptop, link, server, sliders, wifi };
 
 export type IconName = keyof typeof icons;
 

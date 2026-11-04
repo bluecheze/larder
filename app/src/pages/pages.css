@@ -1,0 +1,140 @@
+.page {
+  display: grid;
+  gap: 24px;
+  max-width: 760px;
+}
+
+.page__head h1 {
+  font-size: 24px;
+}
+
+.page__head p {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.panel {
+  display: grid;
+  gap: 14px;
+  padding: 20px 22px;
+}
+
+.panel h2 {
+  font-size: 16px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.status::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.status[data-state="on"]::before {
+  background: var(--ok);
+  box-shadow: 0 0 0 4px rgb(63 125 74 / 0.15);
+}
+
+.status[data-state="error"]::before {
+  background: var(--danger);
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.invite-code {
+  padding: 12px 14px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+  word-break: break-all;
+  user-select: all;
+}
+
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+
+.inline .field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.list li:first-child {
+  border-top: 0;
+}
+
+.list__main {
+  flex: 1;
+  display: grid;
+}
+
+.list__main small {
+  color: var(--muted);
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted);
+}
+
+.empty img {
+  width: 48px;
+  height: 48px;
+}
+
+.btn--danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+}

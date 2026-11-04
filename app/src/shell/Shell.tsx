@@ -1,29 +1,23 @@
-import { api, type AppConfig } from "../lib/api";
-import { Icon } from "../ui/Icon";
+import { useState } from "react";
+import type { AppConfig } from "../lib/api";
+import { Devices } from "../pages/Devices";
+import { Overview } from "../pages/Overview";
+import { Settings } from "../pages/Settings";
+import { Sidebar, type Page } from "./Sidebar";
 import "./shell.css";
 
 type Props = { config: AppConfig; onReset: () => void };
 
-// Placeholder until the real pages land. Enough to see setup worked and
-// to switch roles while testing.
 export function Shell({ config, onReset }: Props) {
-  async function changeRole() {
-    await api.resetConfig();
-    onReset();
-  }
-
+  const [page, setPage] = useState<Page>("overview");
   return (
-    <main className="shell">
-      <section className="card shell__card">
-        <h1>{config.device_name}</h1>
-        <p className="shell__role">
-          <Icon name={config.role === "host" ? "server" : "laptop"} /> This computer is a {config.role}
-        </p>
-        {config.host && <p>Library: {config.host.library}</p>}
-        <button type="button" className="btn" onClick={changeRole}>
-          Change role
-        </button>
-      </section>
-    </main>
+    <div className="shell">
+      <Sidebar config={config} page={page} onPage={setPage} />
+      <main className="shell__main">
+        {page === "overview" && <Overview config={config} />}
+        {page === "devices" && <Devices />}
+        {page === "settings" && <Settings config={config} onReset={onReset} />}
+      </main>
+    </div>
   );
 }
