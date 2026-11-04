@@ -3,8 +3,8 @@ from pathlib import Path
 
 from PIL import Image
 
-from font import paint_title
-from palette import CREAM, ORANGE, ORANGE_DARK, SKIN, WOOD_INK
+from chalk import chalk_title
+from palette import ORANGE, ORANGE_DARK, SKIN
 from pixelate import pixelate, upscale
 
 ART = Path(__file__).resolve().parent
@@ -14,15 +14,15 @@ ASSETS = ART.parent / "assets"
 GRID_WIDTH = 768
 COLORS = 56
 OUT_WIDTH = 1536
-TITLE_AT = (64, 72)
-TITLE_SCALE = 6
+TITLE_AT = (108, 68)
+TITLE_SCALE = 4
 PLANK = (398, 132, 556, 141)
 
 
 def render(grid_width=GRID_WIDTH, colors=COLORS):
     img = pixelate(Image.open(SOURCE), grid_width, colors, (ORANGE, ORANGE_DARK, SKIN))
     plain = img.copy()
-    paint_title(img, "larder", "your own drive", *TITLE_AT, TITLE_SCALE, CREAM, WOOD_INK)
+    chalk_title(img, "larder", "your own drive", *TITLE_AT, TITLE_SCALE)
     return upscale(img, OUT_WIDTH), divider(plain)
 
 

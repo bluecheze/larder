@@ -1,4 +1,6 @@
 def put(img, x, y, color):
+    if len(color) == 3 and img.mode == "RGBA":
+        color = color + (255,)
     if 0 <= x < img.width and 0 <= y < img.height:
         img.putpixel((x, y), color)
 
