@@ -1,4 +1,5 @@
 pub mod conflict;
+pub mod fsutil;
 pub mod invite;
 pub mod paths;
 pub mod plan;

@@ -49,4 +49,8 @@ pub struct NewShelf {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiError {
     pub error: String,
+    /// Only set on a 409: the hash the host actually has, so the client can
+    /// replan without fetching the whole manifest again.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub current: Option<String>,
 }
