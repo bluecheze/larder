@@ -8,11 +8,12 @@ import globe from "pixelarticons/svg/globe.svg?raw";
 import laptop from "pixelarticons/svg/laptop.svg?raw";
 import link from "pixelarticons/svg/link.svg?raw";
 import plus from "pixelarticons/svg/plus.svg?raw";
+import reload from "pixelarticons/svg/reload.svg?raw";
 import server from "pixelarticons/svg/server.svg?raw";
 import sliders from "pixelarticons/svg/sliders.svg?raw";
 import wifi from "pixelarticons/svg/wifi.svg?raw";
 
-const icons = { archive, arrowLeft, arrowRight, check, copy, folder, globe, laptop, link, plus, server, sliders, wifi };
+const icons = { archive, arrowLeft, arrowRight, check, copy, folder, globe, laptop, link, plus, reload, server, sliders, wifi };
 
 export type IconName = keyof typeof icons;
 

@@ -18,6 +18,20 @@ export type Connection = {
 
 export type ClientSettings = {
   connection: Connection;
+  folder: string | null;
+  synced: string[];
+  check_every_secs: number;
+};
+
+export type Theme = "system" | "light" | "dark";
+export type Accent = "cobalt" | "forest" | "rust" | "graphite";
+
+export type Prefs = {
+  theme: Theme;
+  accent: Accent;
+  show_in_sidebar: boolean;
+  ignore: string[];
+  start_at_login: boolean;
 };
 
 export type AppConfig = {
@@ -25,6 +39,7 @@ export type AppConfig = {
   device_name: string;
   host: HostSettings | null;
   client: ClientSettings | null;
+  prefs: Prefs;
 };
 
 export type Defaults = {
@@ -55,6 +70,21 @@ export type ClientStatus = {
   shelves: Shelf[];
 };
 
+export type ShelfSync = {
+  state: "idle" | "syncing" | "error";
+  last_sync: number | null;
+  error: string | null;
+};
+
+export type ChangeKind = "uploaded" | "downloaded" | "deleted" | "removed" | "conflict";
+
+export type Activity = {
+  at: number;
+  shelf: string;
+  path: string;
+  kind: ChangeKind;
+};
+
 export type Device = {
   id: string;
   name: string;
@@ -76,4 +106,12 @@ export const api = {
   hostShelves: () => invoke<string[]>("host_shelves"),
   createShelf: (name: string) => invoke<void>("create_shelf", { name }),
   clientStatus: () => invoke<ClientStatus>("client_status"),
+  saveSettings: (edit: AppConfig) => invoke<AppConfig>("save_settings", { edit }),
+  setSynced: (shelf: string, on: boolean) => invoke<AppConfig>("set_synced", { shelf, on }),
+  syncNow: (shelf: string) => invoke<void>("sync_now", { shelf }),
+  syncStatus: () => invoke<Record<string, ShelfSync>>("sync_status"),
+  syncActivity: () => invoke<Activity[]>("sync_activity"),
+  larderFolder: () => invoke<string | null>("larder_folder"),
+  openFolder: (shelf?: string) => invoke<void>("open_folder", { shelf: shelf ?? null }),
+  pinFolder: () => invoke<"done" | "manual">("pin_folder"),
 };

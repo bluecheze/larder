@@ -130,3 +130,25 @@
   background: var(--accent-soft);
   color: var(--accent-hover);
 }
+
+.panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.list--tight li {
+  padding: 8px 0;
+}
+
+.list__main small[data-error] {
+  color: var(--danger);
+}
+
+.note--row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}

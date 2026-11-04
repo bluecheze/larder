@@ -1,15 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, type Device } from "../lib/api";
+import { ago } from "../lib/format";
 import { InviteMaker } from "./InviteMaker";
 import "./pages.css";
-
-function ago(seconds: number): string {
-  const diff = Math.max(0, Date.now() / 1000 - seconds);
-  if (diff < 90) return "just now";
-  if (diff < 3600) return `${Math.round(diff / 60)} min ago`;
-  if (diff < 86400) return `${Math.round(diff / 3600)} h ago`;
-  return `${Math.round(diff / 86400)} days ago`;
-}
 
 export function Devices() {
   const [devices, setDevices] = useState<Device[]>([]);

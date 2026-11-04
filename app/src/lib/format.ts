@@ -14,3 +14,11 @@ export function bytes(n: number): string {
 export function files(n: number): string {
   return n === 1 ? "1 file" : `${n} files`;
 }
+
+export function ago(seconds: number, now = Date.now() / 1000): string {
+  const diff = Math.max(0, now - seconds);
+  if (diff < 45) return "just now";
+  if (diff < 3600) return `${Math.max(1, Math.round(diff / 60))} min ago`;
+  if (diff < 86400) return `${Math.round(diff / 3600)} h ago`;
+  return `${Math.round(diff / 86400)} days ago`;
+}

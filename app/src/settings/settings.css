@@ -1,0 +1,101 @@
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.setting > span:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.setting__label {
+  font-weight: 550;
+}
+
+.setting__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+}
+
+.segmented button {
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--muted);
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.swatches {
+  display: flex;
+  gap: 10px;
+}
+
+/* Each swatch borrows the accent it stands for by setting data-accent on
+   itself, the same attribute the root uses. */
+.swatch {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--line-strong);
+  cursor: pointer;
+}
+
+.swatch[data-accent="cobalt"] {
+  --accent: #2f5fb3;
+}
+.swatch[data-accent="forest"] {
+  --accent: #3f7d4a;
+}
+.swatch[data-accent="rust"] {
+  --accent: #b9542a;
+}
+.swatch[data-accent="graphite"] {
+  --accent: #4a4a52;
+}
+
+.swatch[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--text);
+}
+
+.save-bar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 0;
+  background: linear-gradient(transparent, var(--bg) 30%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--quick) var(--ease);
+}
+
+.save-bar[data-visible] {
+  opacity: 1;
+  pointer-events: auto;
+}

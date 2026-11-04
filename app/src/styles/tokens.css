@@ -10,7 +10,8 @@
   --muted: #7a6b59;
   --accent: #2f5fb3;
   --accent-hover: #284f97;
-  --accent-soft: #e6edf9;
+  /* Derived, so every accent gets a matching tint in light and dark. */
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, var(--surface));
   --warm: #d9702a;
   --warm-soft: #fbeadb;
   --danger: #b3412f;
@@ -25,4 +26,47 @@
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --quick: 140ms;
+}
+
+/* Dark has to be set twice: once for "follow the system" and once for an
+   explicit choice, since the media query can't see the user's setting. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16130f;
+    --surface: #1f1b16;
+    --surface-sunk: #1a1713;
+    --line: #322b23;
+    --line-strong: #4a4034;
+    --text: #efe7da;
+    --muted: #a6978a;
+    --warm-soft: #3a2a1c;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #16130f;
+  --surface: #1f1b16;
+  --surface-sunk: #1a1713;
+  --line: #322b23;
+  --line-strong: #4a4034;
+  --text: #efe7da;
+  --muted: #a6978a;
+  --warm-soft: #3a2a1c;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+}
+
+:root[data-accent="forest"] {
+  --accent: #3f7d4a;
+  --accent-hover: #346a3e;
+}
+
+:root[data-accent="rust"] {
+  --accent: #b9542a;
+  --accent-hover: #9e4722;
+}
+
+:root[data-accent="graphite"] {
+  --accent: #4a4a52;
+  --accent-hover: #3a3a41;
 }

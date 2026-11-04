@@ -44,7 +44,13 @@ impl ClientRuntime {
             role: Role::Client,
             device_name: device_name.trim().to_string(),
             host: None,
-            client: Some(ClientSettings { connection }),
+            client: Some(ClientSettings {
+                connection,
+                folder: None,
+                synced: vec![],
+                check_every_secs: crate::config::DEFAULT_CHECK_SECS,
+            }),
+            prefs: Default::default(),
         })
     }
 

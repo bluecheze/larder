@@ -76,5 +76,6 @@ export function toHostConfig(draft: Draft): AppConfig {
       domain: draft.useDomain ? draft.domain.trim().toLowerCase() : null,
       email: draft.useDomain ? draft.email.trim() : null,
     },
+    prefs: { theme: "system", accent: "cobalt", show_in_sidebar: true, ignore: [], start_at_login: false },
   };
 }
