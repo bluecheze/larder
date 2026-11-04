@@ -165,3 +165,16 @@ async fn ignoring_synced_files_never_deletes_them() {
     assert!(w.library.join("docs/art.psd").exists());
     assert!(w.library.join("docs/cache/blob.bin").exists());
 }
+
+#[tokio::test]
+async fn losing_the_whole_folder_redownloads_instead_of_wiping_the_host() {
+    let mut w = world().await;
+    w.a.write("one.txt", "1");
+    w.a.write("sub/two.txt", "2");
+    w.a.sync().await;
+    fs::remove_dir_all(w.a.dir.path()).unwrap();
+    let changes = w.a.sync().await;
+    assert!(changes.iter().all(|c| *c == ChangeKind::Downloaded), "{changes:?}");
+    assert_eq!(w.a.read("sub/two.txt").as_deref(), Some("2"));
+    assert!(w.library.join("docs/one.txt").exists());
+}

@@ -50,6 +50,13 @@ pub struct Change {
 /// `state` is updated as things succeed, so save it even when this errors
 /// halfway, it still describes what really happened.
 pub async fn sync_shelf(job: &SyncJob<'_>, state: &mut ShelfState) -> Result<Vec<Change>, ClientError> {
+    // The whole folder vanishing (deleted, renamed, drive unplugged) is not
+    // the same as deleting every file in it one by one. Treat it as a fresh
+    // start and pull everything down again, never as "delete it all on the
+    // host". This is the classic way sync apps wipe people's servers.
+    if !job.root.exists() {
+        *state = ShelfState::default();
+    }
     tokio::fs::create_dir_all(job.root).await?;
     let root = job.root.to_path_buf();
     let previous = state.scan.clone();

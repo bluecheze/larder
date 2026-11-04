@@ -19,8 +19,13 @@ pub struct StateFile {
 }
 
 impl StateFile {
-    pub fn new(dir: &Path, shelf: &str) -> Self {
-        StateFile { path: dir.join(format!("{shelf}.json")) }
+    /// The local folder is part of the file name. Point a shelf at a new
+    /// folder and it starts from scratch, instead of reading the old
+    /// folder's history and deciding everything in the new, empty one got
+    /// deleted.
+    pub fn new(dir: &Path, shelf: &str, root: &Path) -> Self {
+        let tag = blake3::hash(root.to_string_lossy().as_bytes()).to_hex();
+        StateFile { path: dir.join(format!("{shelf}-{}.json", &tag[..12])) }
     }
 
     pub fn load(&self) -> io::Result<ShelfState> {
