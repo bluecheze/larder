@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import folder from "../assets/icon-drive.png";
 import { api, type Device } from "../lib/api";
 import { InviteMaker } from "./InviteMaker";
 import "./pages.css";
@@ -38,10 +37,7 @@ export function Devices() {
       <div className="card panel">
         <h2>Paired</h2>
         {devices.length === 0 ? (
-          <div className="empty">
-            <img src={folder} alt="" />
-            Nothing paired yet. Make an invite above and paste it into Larder on the other computer.
-          </div>
+          <p className="empty">Nothing paired yet. Make an invite above and paste it into Larder on the other computer.</p>
         ) : (
           <ul className="list">
             {devices.map((device) => (

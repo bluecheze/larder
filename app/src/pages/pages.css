@@ -102,15 +102,7 @@
 }
 
 .empty {
-  display: flex;
-  align-items: center;
-  gap: 16px;
   color: var(--muted);
-}
-
-.empty img {
-  width: 48px;
-  height: 48px;
 }
 
 .btn--danger:hover {

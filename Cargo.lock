@@ -2283,6 +2283,27 @@ dependencies = [
 ]
 
 [[package]]
+name = "larder-client"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "futures-util",
+ "hex",
+ "larder-core",
+ "larder-host",
+ "reqwest",
+ "rustls",
+ "serde",
+ "serde_json",
+ "sha2 0.11.1",
+ "tempfile",
+ "thiserror 2.0.21",
+ "tokio",
+ "tokio-util",
+ "webpki-roots",
+]
+
+[[package]]
 name = "larder-core"
 version = "0.1.0"
 dependencies = [
