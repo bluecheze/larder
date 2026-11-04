@@ -47,6 +47,12 @@ pub struct NewShelf {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MoveRequest {
+    pub from: String,
+    pub to: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiError {
     pub error: String,
     /// Only set on a 409: the hash the host actually has, so the client can

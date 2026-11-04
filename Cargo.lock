@@ -670,6 +670,7 @@ dependencies = [
  "filetime",
  "futures-util",
  "hex",
+ "http-body-util",
  "larder-core",
  "rand",
  "reqwest",
@@ -679,6 +680,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "tokio-util",
+ "tower",
  "tracing",
 ]
 
