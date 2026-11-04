@@ -57,6 +57,12 @@ impl RelPath {
     }
 }
 
+/// Shelf names end up as folder names on the host, so they follow the same
+/// rules as a single path segment.
+pub fn valid_shelf_name(name: &str) -> bool {
+    valid_component(name) && !name.starts_with('.')
+}
+
 fn valid_component(part: &str) -> bool {
     if part.is_empty() || part == "." || part == ".." {
         return false;
@@ -118,6 +124,14 @@ mod tests {
         let rel = RelPath::parse("a/b/c.txt").unwrap();
         let full = rel.to_fs(root);
         assert_eq!(RelPath::from_fs(root, &full), Some(rel));
+    }
+
+    #[test]
+    fn shelf_names_are_single_segments() {
+        assert!(valid_shelf_name("Photos"));
+        assert!(!valid_shelf_name("a/b"));
+        assert!(!valid_shelf_name(".larder"));
+        assert!(!valid_shelf_name(""));
     }
 
     #[test]
