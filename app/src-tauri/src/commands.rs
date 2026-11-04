@@ -1,5 +1,6 @@
 use tauri::{AppHandle, Manager, State};
 
+use crate::client_runtime::{ClientRuntime, ClientStatus};
 use crate::config::{self, AppConfig, ConfigStore, Defaults};
 use crate::host_runtime::{DeviceView, HostRuntime, HostStatus};
 
@@ -9,7 +10,7 @@ fn text(err: impl std::fmt::Display) -> String {
 
 #[tauri::command]
 pub fn load_config(store: State<'_, ConfigStore>) -> Result<Option<AppConfig>, String> {
-    store.load().map_err(text)
+    Ok(store.load().map_err(text)?.map(|c| c.for_ui()))
 }
 
 #[tauri::command]
@@ -24,8 +25,28 @@ pub async fn save_config(
 }
 
 #[tauri::command]
-pub async fn reset_config(store: State<'_, ConfigStore>, host: State<'_, HostRuntime>) -> Result<(), String> {
+pub async fn join_host(
+    store: State<'_, ConfigStore>,
+    host: State<'_, HostRuntime>,
+    client: State<'_, ClientRuntime>,
+    invite: String,
+    device_name: String,
+) -> Result<AppConfig, String> {
+    let config = ClientRuntime::join(&invite, &device_name).await.map_err(text)?;
+    store.save(&config).map_err(text)?;
     host.stop().await;
+    client.apply(Some(&config)).await;
+    Ok(config.for_ui())
+}
+
+#[tauri::command]
+pub async fn reset_config(
+    store: State<'_, ConfigStore>,
+    host: State<'_, HostRuntime>,
+    client: State<'_, ClientRuntime>,
+) -> Result<(), String> {
+    host.stop().await;
+    client.apply(None).await;
     store.reset().map_err(text)
 }
 
@@ -53,4 +74,19 @@ pub async fn list_devices(host: State<'_, HostRuntime>) -> Result<Vec<DeviceView
 #[tauri::command]
 pub async fn revoke_device(host: State<'_, HostRuntime>, id: String) -> Result<bool, String> {
     host.revoke(&id).await.map_err(text)
+}
+
+#[tauri::command]
+pub async fn host_shelves(host: State<'_, HostRuntime>) -> Result<Vec<String>, String> {
+    host.shelves().await.map_err(text)
+}
+
+#[tauri::command]
+pub async fn create_shelf(host: State<'_, HostRuntime>, name: String) -> Result<(), String> {
+    host.create_shelf(&name).await.map_err(text)
+}
+
+#[tauri::command]
+pub async fn client_status(client: State<'_, ClientRuntime>) -> Result<ClientStatus, String> {
+    Ok(client.status().await)
 }

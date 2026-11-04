@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { initialDraft, problem, stepsFor, toConfig } from "./steps";
+import { initialDraft, problem, stepsFor, toHostConfig } from "./steps";
 
 const defaults = { device_name: "Studio Mac", library: "/Users/me/Larder", port: 5273 };
 
@@ -27,14 +27,13 @@ describe("setup steps", () => {
   });
 
   it("builds a host config and drops the domain when it's off", () => {
-    const config = toConfig({ ...initialDraft(defaults), domain: "left.over", email: "x@y.z" });
+    const config = toHostConfig({ ...initialDraft(defaults), domain: "left.over", email: "x@y.z" });
     expect(config.host).toEqual({ library: "/Users/me/Larder", port: 5273, domain: null, email: null });
     expect(config.client).toBeNull();
   });
 
-  it("builds a client config", () => {
-    const config = toConfig({ ...initialDraft(defaults), role: "client", invite: "larder://pc?token=t" });
-    expect(config.host).toBeNull();
-    expect(config.client?.invite).toBe("larder://pc?token=t");
+  it("keeps the domain when it's on", () => {
+    const config = toHostConfig({ ...initialDraft(defaults), useDomain: true, domain: "Files.Example.com ", email: "a@b.c" });
+    expect(config.host?.domain).toBe("files.example.com");
   });
 });

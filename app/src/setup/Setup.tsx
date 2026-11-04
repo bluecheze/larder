@@ -8,7 +8,7 @@ import { NameStep } from "./NameStep";
 import { NetworkStep } from "./NetworkStep";
 import { RoleStep } from "./RoleStep";
 import { SetupArt } from "./SetupArt";
-import { initialDraft, problem, stepsFor, toConfig, type Draft, type StepId } from "./steps";
+import { initialDraft, problem, stepsFor, toHostConfig, type Draft, type StepId } from "./steps";
 import "./setup.css";
 
 type Props = { defaults: Defaults; onDone: (config: AppConfig) => void };
@@ -33,9 +33,13 @@ export function Setup({ defaults, onDone }: Props) {
     if (!last) return setIndex(index + 1);
     setSaving(true);
     try {
-      const config = toConfig(draft);
-      await api.saveConfig(config);
-      onDone(config);
+      if (draft.role === "client") {
+        onDone(await api.joinHost(draft.invite, draft.deviceName));
+      } else {
+        const config = toHostConfig(draft);
+        await api.saveConfig(config);
+        onDone(config);
+      }
     } catch (e) {
       setError(String(e));
       setSaving(false);
@@ -62,7 +66,7 @@ export function Setup({ defaults, onDone }: Props) {
             </button>
           )}
           <button type="button" className="btn btn--primary" onClick={next} disabled={saving}>
-            {last ? "Start Larder" : "Continue"} <Icon name={last ? "check" : "arrowRight"} size={18} />
+            {last ? (saving ? "Connecting..." : "Start Larder") : "Continue"} <Icon name={last ? "check" : "arrowRight"} size={18} />
           </button>
         </footer>
       </section>

@@ -2271,6 +2271,7 @@ version = "0.1.0"
 dependencies = [
  "gethostname",
  "if-addrs",
+ "larder-client",
  "larder-core",
  "larder-host",
  "serde",

@@ -12,6 +12,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 [dependencies]
 gethostname = "1.1.0"
 if-addrs = "0.15.0"
+larder-client = { version = "0.1.0", path = "../../crates/larder-client" }
 larder-core = { version = "0.1.0", path = "../../crates/larder-core" }
 larder-host = { version = "0.1.0", path = "../../crates/larder-host" }
 serde = { version = "1.0.229", features = ["derive"] }

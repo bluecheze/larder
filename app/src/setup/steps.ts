@@ -63,13 +63,12 @@ export function problem(step: StepId, draft: Draft): string | null {
   }
 }
 
-export function toConfig(draft: Draft): AppConfig {
-  const base = { role: draft.role, device_name: draft.deviceName.trim() };
-  if (draft.role === "client") {
-    return { ...base, host: null, client: { invite: draft.invite.trim() } };
-  }
+// Clients don't build their config here, pairing with the host does that
+// on the Rust side and hands back the result.
+export function toHostConfig(draft: Draft): AppConfig {
   return {
-    ...base,
+    role: "host",
+    device_name: draft.deviceName.trim(),
     client: null,
     host: {
       library: draft.library.trim(),

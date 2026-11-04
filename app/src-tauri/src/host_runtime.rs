@@ -134,6 +134,17 @@ impl HostRuntime {
         running.as_ref().map_or_else(Vec::new, |r| r.host.devices().into_iter().map(view).collect())
     }
 
+    pub async fn shelves(&self) -> io::Result<Vec<String>> {
+        let running = self.running.lock().await;
+        running.as_ref().map_or_else(|| Ok(Vec::new()), |r| r.host.shelf_names())
+    }
+
+    pub async fn create_shelf(&self, name: &str) -> io::Result<()> {
+        let running = self.running.lock().await;
+        let running = running.as_ref().ok_or_else(|| io::Error::other("the host isn't running"))?;
+        running.host.create_shelf(name).map_err(|e| io::Error::new(io::ErrorKind::InvalidInput, e.to_string()))
+    }
+
     pub async fn revoke(&self, id: &str) -> io::Result<bool> {
         let running = self.running.lock().await;
         let running = running.as_ref().ok_or_else(|| io::Error::other("the host isn't running"))?;

@@ -31,6 +31,14 @@ export function Settings({ config, onReset }: Props) {
               <dd>{config.host.port}</dd>
             </>
           )}
+          {config.client && (
+            <>
+              <dt>Host</dt>
+              <dd>{config.client.connection.host_name}</dd>
+              <dt>Address</dt>
+              <dd className="mono">{config.client.connection.address}</dd>
+            </>
+          )}
         </dl>
         <div>
           <button type="button" className="btn" onClick={changeRole}>

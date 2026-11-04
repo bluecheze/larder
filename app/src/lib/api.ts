@@ -9,8 +9,15 @@ export type HostSettings = {
   email: string | null;
 };
 
+export type Connection = {
+  address: string;
+  fingerprint: string | null;
+  host_name: string;
+  device_id: string;
+};
+
 export type ClientSettings = {
-  invite: string;
+  connection: Connection;
 };
 
 export type AppConfig = {
@@ -34,6 +41,20 @@ export type HostStatus = {
   domain: string | null;
 };
 
+export type Shelf = {
+  name: string;
+  files: number;
+  bytes: number;
+};
+
+export type ClientStatus = {
+  connected: boolean;
+  host_name: string | null;
+  address: string | null;
+  error: string | null;
+  shelves: Shelf[];
+};
+
 export type Device = {
   id: string;
   name: string;
@@ -45,10 +66,14 @@ export type Device = {
 export const api = {
   loadConfig: () => invoke<AppConfig | null>("load_config"),
   saveConfig: (config: AppConfig) => invoke<void>("save_config", { config }),
+  joinHost: (invite: string, deviceName: string) => invoke<AppConfig>("join_host", { invite, deviceName }),
   resetConfig: () => invoke<void>("reset_config"),
   defaults: () => invoke<Defaults>("defaults"),
   hostStatus: () => invoke<HostStatus>("host_status"),
   createInvite: (address: string) => invoke<string>("create_invite", { address }),
   listDevices: () => invoke<Device[]>("list_devices"),
   revokeDevice: (id: string) => invoke<boolean>("revoke_device", { id }),
+  hostShelves: () => invoke<string[]>("host_shelves"),
+  createShelf: (name: string) => invoke<void>("create_shelf", { name }),
+  clientStatus: () => invoke<ClientStatus>("client_status"),
 };

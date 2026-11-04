@@ -2,15 +2,16 @@ import jar from "../assets/icon-shelf.png";
 import type { AppConfig } from "../lib/api";
 import { Icon, type IconName } from "../ui/Icon";
 
-export type Page = "overview" | "devices" | "settings";
+export type Page = "overview" | "shelves" | "devices" | "settings";
 
 const HOST_PAGES: [Page, string, IconName][] = [
   ["overview", "Overview", "server"],
+  ["shelves", "Shelves", "folder"],
   ["devices", "Devices", "laptop"],
   ["settings", "Settings", "sliders"],
 ];
 
-const CLIENT_PAGES = HOST_PAGES.filter(([page]) => page !== "devices");
+const CLIENT_PAGES = HOST_PAGES.filter(([page]) => page === "overview" || page === "settings");
 
 type Props = { config: AppConfig; page: Page; onPage: (page: Page) => void };
 
